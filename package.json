@@ -15,7 +15,7 @@
     "tsc:w": "tsc -w",
     "sideload": "office-addin-debugging start manifest.xml",
     "start": "concurrently \"npm run start:server\" \"npm run sideload\" ",
-    "start:server": "node server.js"
+    "start:server": "node ./node_modules/office-addin-sso/lib/cli.js start manifest.xml"
   },
   "dependencies": {
     "dotenv": "^8.1.0",
