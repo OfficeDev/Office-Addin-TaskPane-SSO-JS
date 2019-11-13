@@ -1,12 +1,14 @@
 /*
- * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license in root of repo. 
- *
- * This file shows how to use the SSO API to get a bootstrap token.
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
  */
-import { getGraphData } from './../helpers/graphHelper';
 
-Office.onReady(function(info) {
-    $(document).ready(function() {
-        $('#getGraphDataButton').click(getGraphData);
-    });
+/* global $, document, Office */
+
+import { getGraphData } from "./../helpers/graphHelper";
+
+Office.onReady(function() {
+  $(document).ready(function() {
+    $("#getGraphDataButton").click(getGraphData);
+  });
 });
