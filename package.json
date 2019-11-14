@@ -11,11 +11,10 @@
     "build:dev": "webpack --mode development --https false",
     "clean": "rimraf dist",
     "configure-sso": "node ./node_modules/office-addin-sso/lib/cli.js configure manifest.xml Office-Addin-NodeJS-SSO",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
     "sideload": "office-addin-debugging start manifest.xml",
     "start": "concurrently \"npm run start-server\" \"npm run sideload\" ",
-    "start-server": "node ./node_modules/office-addin-sso/lib/cli.js start manifest.xml"
+    "start-server": "node ./node_modules/office-addin-sso/lib/cli.js start manifest.xml",
+    "watch": "webpack --watch --mode development"
   },
   "dependencies": {
     "dotenv": "^8.1.0",
