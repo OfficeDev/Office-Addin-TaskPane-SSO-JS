@@ -9,6 +9,7 @@ module.exports = async (env, options) => {
     const config = {
         devtool: "source-map",
         entry: {
+            commands: "./src/commands/commands.js",
             polyfill: "@babel/polyfill",
             taskpane: "./src/taskpane/taskpane.js",
             fallbackauthtaskpane: "./src/taskpane/fallbackAuthTaskpane.js",
@@ -45,6 +46,11 @@ module.exports = async (env, options) => {
                 filename: "taskpane.html",
                 template: "./src/taskpane/taskpane.html",
                 chunks: ["polyfill", "taskpane"]
+            }),
+            new HtmlWebpackPlugin({
+                filename: "commands.html",
+                template: "./src/commands/commands.html",
+                chunks: ["polyfill", "commands"]
             }),
             new HtmlWebpackPlugin({
                 filename: "fallbackauthdialog.html",
