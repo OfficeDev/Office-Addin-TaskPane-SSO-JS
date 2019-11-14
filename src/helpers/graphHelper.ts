@@ -7,7 +7,7 @@
 
 import { handleAADErrors, handleClientSideErrors } from "./errorHandler";
 import { showMessage } from "./messageHelper";
-import { writeFileNamesToOfficeDocument } from "./documentHelper";
+import { writeDataToOfficeDocument } from "./../taskpane/taskpane";
 
 export async function getGraphData(): Promise<void> {
   try {
@@ -54,12 +54,12 @@ export function makeGraphApiCall(accessToken: string): void {
     cache: false
   })
     .done(function(response) {
-      writeFileNamesToOfficeDocument(response)
+      writeDataToOfficeDocument(response)
         .then(function() {
           showMessage("Your data has been added to the document.");
         })
         .catch(function(error) {
-          // The error from writeFileNamesToOfficeDocument will begin
+          // The error from writeDataToOfficeDocument will begin
           // "Unable to add filenames to document."
           showMessage(error);
         });
