@@ -9,24 +9,22 @@ import { getGraphData } from "./../helpers/graphHelper";
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Excel) {
-    $(document).ready(function() {
+    $(document).ready(function () {
       $("#getGraphDataButton").click(getGraphData);
     });
   }
 });
 
 export function writeDataToOfficeDocument(result: string[]) {
-  return Excel.run(function(context) {
-    const sheet: Excel.Worksheet = context.workbook.worksheets.getActiveWorksheet();
+  return Excel.run(function (context) {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
 
     let data = [];
     let i;
     for (i = 0; i < result.length; i++) {
       var innerArray = [];
-      if (result[i] !== null) {
-          innerArray.push(result[i]);
-          data.push(innerArray);
-      }
+      innerArray.push(result[i]);
+      data.push(innerArray);
     }
 
     const rangeAddress = `B5:B${5 + (result.length - 1)}`;
