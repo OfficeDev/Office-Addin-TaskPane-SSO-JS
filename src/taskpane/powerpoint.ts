@@ -15,17 +15,26 @@ Office.onReady(info => {
     }
 });
 
-export function writeDataToOfficeDocument(result: string[]) {
-    let data: string = "";
-    for (let i = 0; i < result.length; i++) {
-        if (result[i] !== null) {
-            data += result[i] + "\n";
+export function writeDataToOfficeDocument(result: Object) {
+    let data: string[] = [];
+    let userProfileInfo: string[] = [];
+    userProfileInfo.push(result["displayName"]);
+    userProfileInfo.push(result["jobTitle"]);
+    userProfileInfo.push(result["mail"]);
+    userProfileInfo.push(result["mobilePhone"]);
+    userProfileInfo.push(result["officeLocation"]);
+
+    for (let i = 0; i < userProfileInfo.length; i++) {
+        if (userProfileInfo[i] !== null) {
+            data.push(userProfileInfo[i]);
         }
     }
 
-    Office.context.document.setSelectedDataAsync(data, function (
-        asyncResult
-    ) {
+    let userInfo: string = "";
+    for (let i = 0; i < data.length; i++) {
+        userInfo += data[i] + '\n';
+    }
+    Office.context.document.setSelectedDataAsync(userInfo, function (asyncResult) {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
             throw asyncResult.error.message;
         }

@@ -1,6 +1,6 @@
 import { getGraphData } from "./graphHelper";
 import { dialogFallback } from "./fallbackAuthHelper";
-import { showMessage } from "./messageHelper";
+import { showMessage } from "./../../node_modules/office-addin-sso/lib/message-helper";
 
 export function handleClientSideErrors(error: any) {
   switch (error.code) {

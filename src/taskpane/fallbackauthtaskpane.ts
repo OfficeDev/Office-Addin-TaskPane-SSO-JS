@@ -45,7 +45,7 @@ const msalConfig: Msal.Configuration = {
 };
 
 var requestObj: Object = {
-  scopes: ["https://graph.microsoft.com/User.Read"]
+  scopes: [`https://graph.microsoft.com/${process.env.SCOPE}`]
 };
 
 const userAgentApp: Msal.UserAgentApplication = new Msal.UserAgentApplication(

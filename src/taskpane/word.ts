@@ -15,15 +15,28 @@ Office.onReady(info => {
     }
 });
 
-export function writeDataToOfficeDocument(result: string[]) {
+export function writeDataToOfficeDocument(result: Object) {
     return Word.run(function (context) {
-        const documentBody: Word.Body = context.document.body;
-        for (let i = 0; i < result.length; i++) {
-            if (result[i] !== null) {
-            documentBody.insertParagraph(result[i], "End");
+        let data = [];
+        let userProfileInfo: string[] = [];
+        userProfileInfo.push(result["displayName"]);
+        userProfileInfo.push(result["jobTitle"]);
+        userProfileInfo.push(result["mail"]);
+        userProfileInfo.push(result["mobilePhone"]);
+        userProfileInfo.push(result["officeLocation"]);
+
+        for (let i = 0; i < userProfileInfo.length; i++) {
+            if (userProfileInfo[i] !== null) {
+                data.push(userProfileInfo[i]);
             }
         }
 
+        const documentBody: Word.Body = context.document.body;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i] !== null) {
+                documentBody.insertParagraph(data[i], "End");
+            }
+        }
         return context.sync();
     });
 }

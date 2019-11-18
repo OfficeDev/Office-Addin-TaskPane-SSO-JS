@@ -6,14 +6,14 @@
 /* global console, location, Office, Microsoft */
 
 import { makeGraphApiCall } from "./graphHelper";
-import { showMessage } from "./messageHelper";
+import { showMessage } from "./../../node_modules/office-addin-sso/lib/message-helper";
 var loginDialog;
 
 export function dialogFallback() {
   // We fall back to Dialog API for any error.
   // TODO: handle specific errors only?
 
-  var url = "/fallbackauthdialog.html";
+  const url = "/fallbackauthdialog.html";
   showLoginPopup(url);
 }
 

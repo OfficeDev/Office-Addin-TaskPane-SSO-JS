@@ -91,7 +91,7 @@ Version  | Date | Comments
 2. Run the command `npm start`. 
 3. A prompt will appear asking if its OK to register the dev-certifates for the dev-server.  Say 'Yes" to this dialog.  **NOTE:** The dev-certs dialog may not be readily visible if you have many windows open, so you may need to minimize other windows to see it.
 4. Excel will automatically start by default.  You can change the default desktop application to Word or PowerPoint by updating the **app-to-debug** in the config section of package.json
-5. In the Office application, on the **Home** ribbon, select the **Show Add-in** button in the **SSO Node.js** group to open the task pane add-in.
+5. In the Office application, on the **Home** ribbon, select the **Show Taskpane** button in the **SSO Node.js** group to open the task pane add-in.
 6. Click the **Get OneDrive File Names** button. If you are logged into Office with either a Work or School (Office 365) account or Microsoft Account, and SSO is working as expected, the first 10 file and folder names in your OneDrive for Business are inserted into the document. (It may take as much as 15 seconds the first time.) If you are not logged in, or you are in a scenario that does not support SSO, or SSO is not working for any reason, you will be prompted to log in. After you log in, the file and folder names appear.
 
 ## Security note

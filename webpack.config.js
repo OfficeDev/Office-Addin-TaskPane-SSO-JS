@@ -10,9 +10,9 @@ module.exports = async (env, options) => {
         devtool: "source-map",
         entry: {
             commands: "./src/commands/commands.ts",
+            fallbackauthtaskpane: "./src/taskpane/fallbackauthtaskpane.ts",
             polyfill: "@babel/polyfill",
             taskpane: "./src/taskpane/taskpane.ts",
-            fallbackauthtaskpane: "./src/taskpane/fallbackauthtaskpane.ts",
         },
         resolve: {
             extensions: [".ts", ".tsx", ".html", ".js"]
