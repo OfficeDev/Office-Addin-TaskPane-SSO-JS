@@ -5,8 +5,9 @@
 
 /* global console, location, Office, Microsoft */
 
-import { makeGraphApiCall } from "./graphHelper";
+import { MSGraphHelper } from './../../node_modules/office-addin-sso/lib/msgraph-helper';
 import { showMessage } from "./../../node_modules/office-addin-sso/lib/message-helper";
+import { writeDataToOfficeDocument } from "./../taskpane/taskpane";
 var loginDialog;
 
 export function dialogFallback() {
@@ -19,14 +20,15 @@ export function dialogFallback() {
 
 // This handler responds to the success or failure message that the pop-up dialog receives from the identity provider
 // and access token provider.
-function processMessage(arg) {
+async function processMessage(arg) {
   console.log("Message received in processMessage: " + JSON.stringify(arg));
   let messageFromDialog = JSON.parse(arg.message);
 
   if (messageFromDialog.status === "success") {
     // We now have a valid access token.
     loginDialog.close();
-    makeGraphApiCall(messageFromDialog.result);
+    const response = await MSGraphHelper.makeGraphApiCall(messageFromDialog.result);
+    writeDataToOfficeDocument(response);
   } else {
     // Something went wrong with authentication or the authorization of the web application.
     loginDialog.close();
@@ -47,13 +49,11 @@ function showLoginPopup(url) {
   Office.context.ui.displayDialogAsync(
     fullUrl,
     { height: 60, width: 30 },
-    function(result) {
+    function (result) {
       console.log("Dialog has initialized. Wiring up events");
       loginDialog = result.value;
       loginDialog.addEventHandler(
-        Microsoft.Office.WebExtension.EventType.DialogMessageReceived,
-        processMessage
-      );
+        Microsoft.Office.WebExtension.EventType.DialogMessageReceived, processMessage);
     }
   );
 }

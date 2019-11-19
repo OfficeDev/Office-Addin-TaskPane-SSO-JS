@@ -9,7 +9,7 @@ import * as excel from "./excel";
 import * as powerpoint from "./powerpoint";
 import * as word from "./word";
 
-export function writeDataToOfficeDocument(result: string[]) {
+export function writeDataToOfficeDocument(result: string[]): Promise<any> {
   return new OfficeExtension.Promise(function(resolve, reject) {
     try {
       switch (Office.context.host) {

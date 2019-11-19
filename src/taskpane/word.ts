@@ -15,9 +15,9 @@ Office.onReady(info => {
     }
 });
 
-export function writeDataToOfficeDocument(result: Object) {
+export function writeDataToOfficeDocument(result: Object): Promise<any> {
     return Word.run(function (context) {
-        let data = [];
+        let data: string[] = [];
         let userProfileInfo: string[] = [];
         userProfileInfo.push(result["displayName"]);
         userProfileInfo.push(result["jobTitle"]);

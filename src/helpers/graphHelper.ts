@@ -4,8 +4,8 @@
  */
 
 /* global $, OfficeRuntime */
-
-import { handleAADErrors, handleClientSideErrors } from "./errorHandler";
+import { dialogFallback } from "./fallbackAuthHelper";
+import { handleClientSideErrors } from './../../node_modules/office-addin-sso/lib/error-handler';
 import { MSGraphHelper } from './../../node_modules/office-addin-sso/lib/msgraph-helper';
 import { showMessage } from "./../../node_modules/office-addin-sso/lib/message-helper";
 import { writeDataToOfficeDocument } from "./../taskpane/taskpane";
@@ -39,12 +39,33 @@ export async function getGraphData(): Promise<void> {
       showMessage("Your data has been added to the document.");
     }
   } catch (exception) {
-    // The only exceptions caught here are exceptions in your code in the try block
-    // and errors returned from the call of `getAccessToken` above.
+    // if handleClientSideErrors returns true then we will try to authenticate via the fallback
+    // dialog rather than simply throw and error
     if (exception.code) {
-      handleClientSideErrors(exception);
+      if (handleClientSideErrors(exception)) {
+        dialogFallback();
+      };
     } else {
       showMessage("EXCEPTION: " + JSON.stringify(exception));
     }
+  }
+}
+
+function handleAADErrors(exchangeResponse: any): void {
+  // On rare occasions the bootstrap token is unexpired when Office validates it,
+  // but expires by the time it is sent to AAD for exchange. AAD will respond
+  // with "The provided value for the 'assertion' is not valid. The assertion has expired."
+  // Retry the call of getAccessToken (no more than once). This time Office will return a
+  // new unexpired bootstrap token.
+
+  let retryGetAccessToken = 0;
+  if (
+    exchangeResponse.error_description.indexOf("AADSTS500133") !== -1 &&
+    retryGetAccessToken <= 0
+  ) {
+    retryGetAccessToken++;
+    getGraphData();
+  } else {
+    dialogFallback();
   }
 }

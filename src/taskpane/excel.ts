@@ -15,7 +15,7 @@ Office.onReady(info => {
   }
 });
 
-export function writeDataToOfficeDocument(result: Object) {
+export function writeDataToOfficeDocument(result: Object): Promise<any> {
   return Excel.run(function (context) {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     let data = []
