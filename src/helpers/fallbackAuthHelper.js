@@ -5,7 +5,7 @@
 
 /* global console, location, Office, Microsoft */
 
-import { MSGraphHelper } from './../../node_modules/office-addin-sso/lib/msgraph-helper';
+import { MSGraphHelper } from "./../../node_modules/office-addin-sso/lib/msgraph-helper";
 import { showMessage } from "./../../node_modules/office-addin-sso/lib/message-helper";
 import { writeDataToOfficeDocument } from "./../taskpane/taskpane";
 var loginDialog;
@@ -27,7 +27,9 @@ async function processMessage(arg) {
   if (messageFromDialog.status === "success") {
     // We now have a valid access token.
     loginDialog.close();
-    const response = await MSGraphHelper.makeGraphApiCall(messageFromDialog.result);
+    const response = await MSGraphHelper.makeGraphApiCall(
+      messageFromDialog.result
+    );
     writeDataToOfficeDocument(response);
   } else {
     // Something went wrong with authentication or the authorization of the web application.
@@ -49,11 +51,13 @@ function showLoginPopup(url) {
   Office.context.ui.displayDialogAsync(
     fullUrl,
     { height: 60, width: 30 },
-    function (result) {
+    function(result) {
       console.log("Dialog has initialized. Wiring up events");
       loginDialog = result.value;
       loginDialog.addEventHandler(
-        Microsoft.Office.WebExtension.EventType.DialogMessageReceived, processMessage);
+        Microsoft.Office.WebExtension.EventType.DialogMessageReceived,
+        processMessage
+      );
     }
   );
 }

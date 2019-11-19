@@ -3,10 +3,10 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global $, OfficeRuntime */
+/* global OfficeRuntime */
 import { dialogFallback } from "./fallbackAuthHelper";
-import { handleClientSideErrors } from './../../node_modules/office-addin-sso/lib/error-handler';
-import { MSGraphHelper } from './../../node_modules/office-addin-sso/lib/msgraph-helper';
+import { handleClientSideErrors } from "./../../node_modules/office-addin-sso/lib/error-handler";
+import { MSGraphHelper } from "./../../node_modules/office-addin-sso/lib/msgraph-helper";
 import { showMessage } from "./../../node_modules/office-addin-sso/lib/message-helper";
 import { writeDataToOfficeDocument } from "./../taskpane/taskpane";
 
@@ -16,7 +16,9 @@ export async function getGraphData(): Promise<void> {
       allowSignInPrompt: true,
       forMSGraphAccess: true
     });
-    let exchangeResponse: any = await MSGraphHelper.getGraphToken(bootstrapToken);
+    let exchangeResponse: any = await MSGraphHelper.getGraphToken(
+      bootstrapToken
+    );
     if (exchangeResponse.claims) {
       // Microsoft Graph requires an additional form of authentication. Have the Office host
       // get a new token using the Claims string, which tells AAD to prompt the user for all
@@ -34,7 +36,9 @@ export async function getGraphData(): Promise<void> {
     } else {
       // makeGraphApiCall makes an AJAX call to the MS Graph endpoint. Errors are caught
       // in the .fail callback of that call
-      const response: any = await MSGraphHelper.makeGraphApiCall(exchangeResponse.access_token);
+      const response: any = await MSGraphHelper.makeGraphApiCall(
+        exchangeResponse.access_token
+      );
       writeDataToOfficeDocument(response);
       showMessage("Your data has been added to the document.");
     }
@@ -44,7 +48,7 @@ export async function getGraphData(): Promise<void> {
     if (exception.code) {
       if (handleClientSideErrors(exception)) {
         dialogFallback();
-      };
+      }
     } else {
       showMessage("EXCEPTION: " + JSON.stringify(exception));
     }
