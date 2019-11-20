@@ -78,17 +78,9 @@ async function updatePackageJsonForSingleHost(host) {
     // update 'config' section in package.json to use selected host
     content.config["app-to-debug"] = host;
 
-    // update sideload and unload scripts to use selected host.
-    ["sideload", "unload"].forEach(key => {
-        content.scripts[key] = content.scripts[`${key}:${host}`];
-    });
-
     // remove scripts that are unrelated to the selected host
     Object.keys(content.scripts).forEach(function (key) {
-        if (key.startsWith("sideload:")
-            || key.startsWith("unload:")
-            || key === "convert-to-single-host"
-        ) {
+        if (key === "convert-to-single-host") {
             delete content.scripts[key];
         }
     });

@@ -3,8 +3,7 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global Office, OfficeExtension */
-
-import * as excel from "./excel";
-import * as powerpoint from "./powerpoint";
-import * as word from "./word";
+/* global require */
+const excel = require("./excel");
+const powerpoint = require("./powerpoint");
+const word = require("./word");

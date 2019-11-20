@@ -3,29 +3,14 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global $, document, Office */
+/* global $, document, Office, require */
 
-import { getGraphData } from "../helpers/graphHelper";
+const graphHelper = require("./../helpers/graphHelper");
 
 Office.onReady(info => {
   if (info.host === Office.HostType.PowerPoint) {
     $(document).ready(function() {
-      $("#getGraphDataButton").click(getGraphData);
+      $("#getGraphDataButton").click(graphHelper.getGraphData);
     });
   }
 });
-
-export function writeDataToOfficeDocument(result) {
-  let data = "";
-  for (let i = 0; i < result.length; i++) {
-    if (result[i] !== null) {
-      data += result[i] + "\n";
-    }
-  }
-
-  Office.context.document.setSelectedDataAsync(data, function(asyncResult) {
-    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-      throw asyncResult.error.message;
-    }
-  });
-}

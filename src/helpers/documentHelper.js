@@ -3,31 +3,101 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global Office, OfficeExtension */
-
-import * as excel from "./../taskpane/excel";
-import * as powerpoint from "./../taskpane/powerpoint";
-import * as word from "./../taskpane/word";
+/* global Excel, Office, OfficeExtension, Word */
 
 export function writeDataToOfficeDocument(result) {
-    return new OfficeExtension.Promise(function (resolve, reject) {
-        try {
-            switch (Office.context.host) {
-                case Office.HostType.Excel:
-                    excel.writeDataToOfficeDocument(result);
-                    break;
-                case Office.HostType.PowerPoint:
-                    powerpoint.writeDataToOfficeDocument(result);
-                    break;
-                case Office.HostType.Word:
-                    word.writeDataToOfficeDocument(result);
-                    break;
-                default:
-                    throw "Unsupported Office host application: This add-in only runs on Excel, PowerPoint, or Word.";
-            }
-            resolve();
-        } catch (error) {
-            reject(Error("Unable to write data to document. " + error.toString()));
-        }
-    });
+  return new OfficeExtension.Promise(function(resolve, reject) {
+    try {
+      switch (Office.context.host) {
+        case Office.HostType.Excel:
+          writeDataToExcel(result);
+          break;
+        case Office.HostType.PowerPoint:
+          writeDataToPowerPoint(result);
+          break;
+        case Office.HostType.Word:
+          writeDataToWord(result);
+          break;
+        default:
+          throw "Unsupported Office host application: This add-in only runs on Excel, PowerPoint, or Word.";
+      }
+      resolve();
+    } catch (error) {
+      reject(Error("Unable to write data to document. " + error.toString()));
+    }
+  });
+}
+
+function filterUserProfileInfo(result) {
+  let userProfileInfo = [];
+  userProfileInfo.push(result["displayName"]);
+  userProfileInfo.push(result["jobTitle"]);
+  userProfileInfo.push(result["mail"]);
+  userProfileInfo.push(result["mobilePhone"]);
+  userProfileInfo.push(result["officeLocation"]);
+  return userProfileInfo;
+}
+
+function writeDataToExcel(result) {
+  return Excel.run(function(context) {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    let data = [];
+    let userProfileInfo = filterUserProfileInfo(result);
+
+    for (let i = 0; i < userProfileInfo.length; i++) {
+      if (userProfileInfo[i] !== null) {
+        let innerArray = [];
+        innerArray.push(userProfileInfo[i]);
+        data.push(innerArray);
+      }
+    }
+    const rangeAddress = `B5:B${5 + (data.length - 1)}`;
+    const range = sheet.getRange(rangeAddress);
+    range.values = data;
+    range.format.autofitColumns();
+
+    return context.sync();
+  });
+}
+
+function writeDataToPowerPoint(result) {
+  let data = [];
+  let userProfileInfo = filterUserProfileInfo(result);
+
+  for (let i = 0; i < userProfileInfo.length; i++) {
+    if (userProfileInfo[i] !== null) {
+      data.push(userProfileInfo[i]);
+    }
+  }
+
+  let userInfo = "";
+  for (let i = 0; i < data.length; i++) {
+    userInfo += data[i] + "\n";
+  }
+  Office.context.document.setSelectedDataAsync(userInfo, function(asyncResult) {
+    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+      throw asyncResult.error.message;
+    }
+  });
+}
+
+function writeDataToWord(result) {
+  return Word.run(function(context) {
+    let data = [];
+    let userProfileInfo = filterUserProfileInfo(result);
+
+    for (let i = 0; i < userProfileInfo.length; i++) {
+      if (userProfileInfo[i] !== null) {
+        data.push(userProfileInfo[i]);
+      }
+    }
+
+    const documentBody = context.document.body;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i] !== null) {
+        documentBody.insertParagraph(data[i], "End");
+      }
+    }
+    return context.sync();
+  });
 }

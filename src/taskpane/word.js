@@ -3,27 +3,13 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global $, document, Office, Word */
-
-import { getGraphData } from "../helpers/graphHelper";
+/* global $, document, Office, require */
+const graphHelper = require("./../helpers/graphHelper");
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Word) {
     $(document).ready(function() {
-      $("#getGraphDataButton").click(getGraphData);
+      $("#getGraphDataButton").click(graphHelper.getGraphData);
     });
   }
 });
-
-export function writeDataToOfficeDocument(result) {
-  return Word.run(function(context) {
-    const documentBody = context.document.body;
-    for (let i = 0; i < result.length; i++) {
-      if (result[i] !== null) {
-        documentBody.insertParagraph(result[i], "End");
-      }
-    }
-
-    return context.sync();
-  });
-}

@@ -1,6 +1,15 @@
-import { handleAADErrors, handleClientSideErrors } from "./errorHandler";
-import { showMessage } from "./messageHelper";
-import { writeDataToOfficeDocument } from "./documentHelper";
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+
+/* global OfficeRuntime, require */
+
+const documentHelper = require("./documentHelper");
+const errorHandler = require("./../../node_modules/office-addin-sso/lib/error-handler");
+const fallbackAuthHelper = require("./fallbackAuthHelper");
+const msGraphHelper = require("./../../node_modules/office-addin-sso/lib/msgraph-helper");
+const messageHelper = require("./../../node_modules/office-addin-sso/lib/message-helper");
 
 export async function getGraphData() {
   try {
@@ -8,7 +17,9 @@ export async function getGraphData() {
       allowSignInPrompt: true,
       forMSGraphAccess: true
     });
-    let exchangeResponse = await getGraphToken(bootstrapToken);
+    let exchangeResponse = await msGraphHelper.MSGraphHelper.getGraphToken(
+      bootstrapToken
+    );
     if (exchangeResponse.claims) {
       // Microsoft Graph requires an additional form of authentication. Have the Office host
       // get a new token using the Claims string, which tells AAD to prompt the user for all
@@ -16,7 +27,9 @@ export async function getGraphData() {
       let mfaBootstrapToken = await OfficeRuntime.auth.getAccessToken({
         authChallenge: exchangeResponse.claims
       });
-      exchangeResponse = await getGraphToken(mfaBootstrapToken);
+      exchangeResponse = msGraphHelper.MSGraphHelper.getGraphToken(
+        mfaBootstrapToken
+      );
     }
 
     if (exchangeResponse.error) {
@@ -25,50 +38,41 @@ export async function getGraphData() {
       handleAADErrors(exchangeResponse);
     } else {
       // makeGraphApiCall makes an AJAX call to the MS Graph endpoint. Errors are caught
-      // in the .fail callback of that call, not in the catch block below.
-      makeGraphApiCall(exchangeResponse.access_token);
+      // in the .fail callback of that call
+      const response = await msGraphHelper.MSGraphHelper.makeGraphApiCall(
+        exchangeResponse.access_token
+      );
+      documentHelper.writeDataToOfficeDocument(response);
+      messageHelper.showMessage("Your data has been added to the document.");
     }
   } catch (exception) {
-    // The only exceptions caught here are exceptions in your code in the try block
-    // and errors returned from the call of `getAccessToken` above.
+    // if handleClientSideErrors returns true then we will try to authenticate via the fallback
+    // dialog rather than simply throw and error
     if (exception.code) {
-      handleClientSideErrors(exception);
+      if (errorHandler.handleClientSideErrors(exception)) {
+        fallbackAuthHelper.dialogFallback();
+      }
     } else {
-      showMessage("EXCEPTION: " + JSON.stringify(exception));
+      messageHelper.showMessage("EXCEPTION: " + JSON.stringify(exception));
     }
   }
 }
 
-export function makeGraphApiCall(accessToken) {
-  $.ajax({
-    type: "GET",
-    url: "/getuserdata",
-    headers: { access_token: accessToken },
-    cache: false
-  })
-    .done(function(response) {
-      writeDataToOfficeDocument(response)
-        .then(function() {
-          showMessage("Your data has been added to the document.");
-        })
-        .catch(function(error) {
-          // The error from writeFileNamesToOfficeDocument will begin
-          // "Unable to add filenames to document."
-          showMessage(error);
-        });
-    })
-    .fail(function(errorResult) {
-      // This error is relayed from `app.get('/getuserdata` in app.js file.
-      showMessage("Error from Microsoft Graph: " + JSON.stringify(errorResult));
-    });
-}
+function handleAADErrors(exchangeResponse) {
+  // On rare occasions the bootstrap token is unexpired when Office validates it,
+  // but expires by the time it is sent to AAD for exchange. AAD will respond
+  // with "The provided value for the 'assertion' is not valid. The assertion has expired."
+  // Retry the call of getAccessToken (no more than once). This time Office will return a
+  // new unexpired bootstrap token.
 
-export async function getGraphToken(bootstrapToken) {
-  let response = await $.ajax({
-    type: "GET",
-    url: "/auth",
-    headers: { Authorization: "Bearer " + bootstrapToken },
-    cache: false
-  });
-  return response;
+  let retryGetAccessToken = 0;
+  if (
+    exchangeResponse.error_description.indexOf("AADSTS500133") !== -1 &&
+    retryGetAccessToken <= 0
+  ) {
+    retryGetAccessToken++;
+    getGraphData();
+  } else {
+    fallbackAuthHelper.dialogFallback();
+  }
 }
