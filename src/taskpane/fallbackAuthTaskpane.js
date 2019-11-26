@@ -35,7 +35,7 @@ const msalConfig = {
   auth: {
     clientId: "{application GUID here}", //This is your client ID
     authority: "https://login.microsoftonline.com/common",
-    redirectUri: "https://localhost:3000/fallbackauthdialog.html",
+    redirectUri: "https://localhost:{PORT}/fallbackauthdialog.html",
     navigateToLoginRequestUrl: false
   },
   cache: {
