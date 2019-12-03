@@ -12,7 +12,7 @@ module.exports = async (env, options) => {
             commands: "./src/commands/commands.js",
             polyfill: "@babel/polyfill",
             taskpane: "./src/taskpane/taskpane.js",
-            fallbackauthtaskpane: "./src/taskpane/fallbackAuthTaskpane.js",
+            fallbackauthdialog: "./src/helpers/fallbackauthdialog.js",
         },
         output: {
             path: path.resolve(process.cwd(), 'dist'),
@@ -57,8 +57,8 @@ module.exports = async (env, options) => {
             }),
             new HtmlWebpackPlugin({
                 filename: "fallbackauthdialog.html",
-                template: "./src/taskpane/fallbackauthdialog.html",
-                chunks: ["polyfill", "fallbackauthtaskpane"]
+                template: "./src/helpers/fallbackauthdialog.html",
+                chunks: ["polyfill", "fallbackauthdialog"]
             }),
             new CopyWebpackPlugin([
                 {
