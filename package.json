@@ -16,7 +16,7 @@
     "lint:fix": "office-addin-lint fix",
     "prettier": "office-addin-lint prettier",
     "sideload": "office-addin-debugging start manifest.xml",
-    "start": "concurrently \"npm run build:dev\" \"npm run start:server\" \"npm run sideload\"",
+    "start": "npm run build:dev && concurrently \"npm run start:server\" \"npm run sideload\"",
     "start:server": "node ./node_modules/office-addin-sso/lib/cli.js start manifest.xml",
     "validate": "office-addin-manifest validate manifest.xml",
     "watch": "webpack --watch --mode development"
