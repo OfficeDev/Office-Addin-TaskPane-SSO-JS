@@ -4,8 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 
-module.exports = async (env, options) => {
-    const dev = options.mode === "development";
+module.exports = async () => {
     const config = {
         devtool: "source-map",
         entry: {

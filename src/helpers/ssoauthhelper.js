@@ -10,6 +10,7 @@ const errorHandler = require("./../../node_modules/office-addin-sso/lib/error-ha
 const fallbackAuthHelper = require("./fallbackAuthHelper");
 const msGraphHelper = require("./../../node_modules/office-addin-sso/lib/msgraph-helper");
 const messageHelper = require("./../../node_modules/office-addin-sso/lib/message-helper");
+let retryGetAccessToken = 0;
 
 export async function getGraphData() {
   try {
@@ -46,8 +47,6 @@ export async function getGraphData() {
       messageHelper.showMessage("Your data has been added to the document.");
     }
   } catch (exception) {
-    // if handleClientSideErrors returns true then we will try to authenticate via the fallback
-    // dialog rather than simply throw and error
     if (exception.code) {
       if (errorHandler.handleClientSideErrors(exception)) {
         fallbackAuthHelper.dialogFallback();
@@ -65,7 +64,7 @@ function handleAADErrors(exchangeResponse) {
   // Retry the call of getAccessToken (no more than once). This time Office will return a
   // new unexpired bootstrap token.
 
-  let retryGetAccessToken = 0;
+
   if (
     exchangeResponse.error_description.indexOf("AADSTS500133") !== -1 &&
     retryGetAccessToken <= 0

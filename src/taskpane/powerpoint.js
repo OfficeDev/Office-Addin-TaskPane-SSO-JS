@@ -5,7 +5,7 @@
 
 /* global $, document, Office, require */
 
-const graphHelper = require("./../helpers/graphHelper");
+const graphHelper = require("./../helpers/ssoauthhelper");
 
 Office.onReady(info => {
   if (info.host === Office.HostType.PowerPoint) {

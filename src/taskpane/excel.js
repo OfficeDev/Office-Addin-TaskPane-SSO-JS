@@ -5,12 +5,12 @@
 
 /* global $, document, Office, require */
 
-const graphHelper = require("./../helpers/graphHelper");
+const ssoAuthHelper = require("./../helpers/ssoauthhelper");
 
 Office.onReady(info => {
   if (info.host === Office.HostType.Excel) {
     $(document).ready(function() {
-      $("#getGraphDataButton").click(graphHelper.getGraphData);
+      $("#getGraphDataButton").click(ssoAuthHelper.getGraphData);
     });
   }
 });
