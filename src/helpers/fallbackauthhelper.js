@@ -56,7 +56,7 @@ function showLoginPopup(url) {
       console.log("Dialog has initialized. Wiring up events");
       loginDialog = result.value;
       loginDialog.addEventHandler(
-        Microsoft.Office.WebExtension.EventType.DialogMessageReceived,
+        Office.EventType.DialogMessageReceived,
         processMessage
       );
     }
