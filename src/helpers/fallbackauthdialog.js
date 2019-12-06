@@ -53,18 +53,14 @@ const userAgentApp = new Msal.UserAgentApplication(msalConfig);
 function authCallback(error, response) {
   if (error) {
     console.log(error);
-    Office.context.ui.messageParent(
-      JSON.stringify({ status: "failure", result: error })
-    );
+    Office.context.ui.messageParent(JSON.stringify({ status: "failure", result: error }));
   } else {
     if (response.tokenType === "id_token") {
       console.log(response.idToken.rawIdToken);
       localStorage.setItem("loggedIn", "yes");
     } else {
       console.log("token type is:" + response.tokenType);
-      Office.context.ui.messageParent(
-        JSON.stringify({ status: "success", result: response.accessToken })
-      );
+      Office.context.ui.messageParent(JSON.stringify({ status: "success", result: response.accessToken }));
     }
   }
 }

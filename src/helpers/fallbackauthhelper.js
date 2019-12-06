@@ -5,14 +5,11 @@
 
 /* global console, location, Office, Microsoft, require */
 const documentHelper = require("./documentHelper");
-const msGraphHelper = require("./../../node_modules/office-addin-sso/lib/msgraph-helper");
-const messageHelper = require("./../../node_modules/office-addin-sso/lib/message-helper");
+const sso = require("office-addin-sso");
 var loginDialog;
 
 export function dialogFallback() {
   // We fall back to Dialog API for any error.
-  // TODO: handle specific errors only?
-
   const url = "/fallbackauthdialog.html";
   showLoginPopup(url);
 }
@@ -26,27 +23,18 @@ async function processMessage(arg) {
   if (messageFromDialog.status === "success") {
     // We now have a valid access token.
     loginDialog.close();
-    const response = await msGraphHelper.MSGraphHelper.makeGraphApiCall(
-      messageFromDialog.result
-    );
+    const response = await sso.makeGraphApiCall(messageFromDialog.result);
     documentHelper.writeDataToOfficeDocument(response);
   } else {
     // Something went wrong with authentication or the authorization of the web application.
     loginDialog.close();
-    messageHelper.showMessage(
-      JSON.stringify(messageFromDialog.error.toString())
-    );
+    sso.showMessage(JSON.stringify(messageFromDialog.error.toString()));
   }
 }
 
 // Use the Office dialog API to open a pop-up and display the sign-in page for the identity provider.
 function showLoginPopup(url) {
-  var fullUrl =
-    location.protocol +
-    "//" +
-    location.hostname +
-    (location.port ? ":" + location.port : "") +
-    url;
+  var fullUrl = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + url;
 
   // height and width are percentages of the size of the parent Office application, e.g., PowerPoint, Excel, Word, etc.
   Office.context.ui.displayDialogAsync(

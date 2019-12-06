@@ -6,31 +6,20 @@
 /* global OfficeRuntime, require */
 
 const documentHelper = require("./documentHelper");
-const errorHandler = require("./../../node_modules/office-addin-sso/lib/error-handler");
 const fallbackAuthHelper = require("./fallbackAuthHelper");
-const msGraphHelper = require("./../../node_modules/office-addin-sso/lib/msgraph-helper");
-const messageHelper = require("./../../node_modules/office-addin-sso/lib/message-helper");
+const sso = require("office-addin-sso");
 let retryGetAccessToken = 0;
 
 export async function getGraphData() {
   try {
-    let bootstrapToken = await OfficeRuntime.auth.getAccessToken({
-      allowSignInPrompt: true,
-      forMSGraphAccess: true
-    });
-    let exchangeResponse = await msGraphHelper.MSGraphHelper.getGraphToken(
-      bootstrapToken
-    );
+    let bootstrapToken = await OfficeRuntime.auth.getAccessToken({ allowSignInPrompt: true, forMSGraphAccess: true });
+    let exchangeResponse = await sso.getGraphToken(bootstrapToken);
     if (exchangeResponse.claims) {
       // Microsoft Graph requires an additional form of authentication. Have the Office host
       // get a new token using the Claims string, which tells AAD to prompt the user for all
       // required forms of authentication.
-      let mfaBootstrapToken = await OfficeRuntime.auth.getAccessToken({
-        authChallenge: exchangeResponse.claims
-      });
-      exchangeResponse = msGraphHelper.MSGraphHelper.getGraphToken(
-        mfaBootstrapToken
-      );
+      let mfaBootstrapToken = await OfficeRuntime.auth.getAccessToken({ authChallenge: exchangeResponse.claims });
+      exchangeResponse = sso.getGraphToken(mfaBootstrapToken);
     }
 
     if (exchangeResponse.error) {
@@ -40,19 +29,17 @@ export async function getGraphData() {
     } else {
       // makeGraphApiCall makes an AJAX call to the MS Graph endpoint. Errors are caught
       // in the .fail callback of that call
-      const response = await msGraphHelper.MSGraphHelper.makeGraphApiCall(
-        exchangeResponse.access_token
-      );
+      const response = await sso.makeGraphApiCall(exchangeResponse.access_token);
       documentHelper.writeDataToOfficeDocument(response);
-      messageHelper.showMessage("Your data has been added to the document.");
+      sso.showMessage("Your data has been added to the document.");
     }
   } catch (exception) {
     if (exception.code) {
-      if (errorHandler.handleClientSideErrors(exception)) {
+      if (sso.handleClientSideErrors(exception)) {
         fallbackAuthHelper.dialogFallback();
       }
     } else {
-      messageHelper.showMessage("EXCEPTION: " + JSON.stringify(exception));
+      sso.showMessage("EXCEPTION: " + JSON.stringify(exception));
     }
   }
 }
