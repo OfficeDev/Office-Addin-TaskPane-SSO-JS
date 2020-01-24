@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "dotenv": "^8.1.0",
-    "jquery": "^3.4.1",
     "msal": "^1.1.3",
     "node-fetch": "^2.6.0",
     "office-addin-sso": "^1.0.6"

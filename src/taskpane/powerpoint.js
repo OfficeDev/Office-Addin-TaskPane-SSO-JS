@@ -3,14 +3,12 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global $, document, Office, require */
+/* global document, Office, require */
 
 const ssoAuthHelper = require("./../helpers/ssoauthhelper");
 
 Office.onReady(info => {
   if (info.host === Office.HostType.PowerPoint) {
-    $(document).ready(function() {
-      $("#getGraphDataButton").click(ssoAuthHelper.getGraphData);
-    });
+    document.getElementById("getGraphDataButton").onclick = ssoAuthHelper.getGraphData;
   }
 });
