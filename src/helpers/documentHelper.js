@@ -6,11 +6,14 @@
 /* global Excel, Office, OfficeExtension, Word */
 
 export function writeDataToOfficeDocument(result) {
-  return new OfficeExtension.Promise(function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
     try {
       switch (Office.context.host) {
         case Office.HostType.Excel:
           writeDataToExcel(result);
+          break;
+        case Office.HostType.Outlook:
+          writeDataToOutlook(result);
           break;
         case Office.HostType.PowerPoint:
           writeDataToPowerPoint(result);
@@ -58,6 +61,24 @@ function writeDataToExcel(result) {
 
     return context.sync();
   });
+}
+
+function writeDataToOutlook(result) {
+  let data = [];
+  let userProfileInfo = filterUserProfileInfo(result);
+
+  for (let i = 0; i < userProfileInfo.length; i++) {
+    if (userProfileInfo[i] !== null) {
+      data.push(userProfileInfo[i]);
+    }
+  }
+
+  let userInfo = "";
+  for (let i = 0; i < data.length; i++) {
+    userInfo += data[i] + "\n";
+  }
+
+  Office.context.mailbox.item.body.setSelectedDataAsync(userInfo, { coercionType: Office.CoercionType.Html });
 }
 
 function writeDataToPowerPoint(result) {
