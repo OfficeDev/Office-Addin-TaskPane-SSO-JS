@@ -8,7 +8,7 @@
 const ssoAuthHelper = require("./../helpers/ssoauthhelper");
 
 Office.onReady(info => {
-  if (info.host === Office.HostType.PowerPoint) {
+  if (info.host === Office.HostType.Outlook) {
     document.getElementById("getGraphDataButton").onclick = ssoAuthHelper.getGraphData;
   }
 });
