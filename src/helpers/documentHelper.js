@@ -22,7 +22,7 @@ export function writeDataToOfficeDocument(result) {
           writeDataToWord(result);
           break;
         default:
-          throw "Unsupported Office host application: This add-in only runs on Excel, PowerPoint, or Word.";
+          throw "Unsupported Office host application: This add-in only runs on Excel, Outlook, PowerPoint, or Word.";
       }
       resolve();
     } catch (error) {
