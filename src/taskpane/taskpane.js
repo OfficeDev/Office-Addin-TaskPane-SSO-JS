@@ -3,7 +3,8 @@
  * See LICENSE in the project root for license information.
  */
 
-import "./excel";
-import "./outlook";
-import "./powerpoint";
-import "./word";
+/* global require */
+require("./excel");
+require("./outlook");
+require("./powerpoint");
+require("./word");
