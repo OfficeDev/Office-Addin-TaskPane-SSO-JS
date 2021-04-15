@@ -27,7 +27,7 @@ module.exports = async (env, options) => {
     module: {
       rules: [
         {
-          test: /\.ts$/,
+          test: /\.js$/,
           exclude: /node_modules/,
           use: {
             loader: "babel-loader",
