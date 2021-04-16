@@ -16,8 +16,5 @@
   },
   "extends": [
     "eslint-config-office-addins"
-  ],
-  "env": {
-    "es6": true
-  }
+  ]
 }

@@ -3,7 +3,7 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global Excel, Office, Word */
+/* global Excel, Office, Word, Promise */
 
 export function writeDataToOfficeDocument(result) {
   return new Promise(function(resolve, reject) {
