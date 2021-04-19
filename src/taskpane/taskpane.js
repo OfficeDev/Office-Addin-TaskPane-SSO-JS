@@ -4,7 +4,7 @@
  */
 
 /* global require */
-const excel = require("./excel");
-const outlook = require("./outlook");
-const powerpoint = require("./powerpoint");
-const word = require("./word");
+require("./excel");
+require("./outlook");
+require("./powerpoint");
+require("./word");
