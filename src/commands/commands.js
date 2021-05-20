@@ -18,7 +18,7 @@ export function action(event) {
     type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
     message: "Performed action.",
     icon: "Icon.80x80",
-    persistent: true
+    persistent: true,
   };
 
   // Show a notification message
