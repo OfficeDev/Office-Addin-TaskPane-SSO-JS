@@ -8,6 +8,11 @@ const path = require("path");
 const urlDev = "https://localhost:3000/";
 const urlProd = "https://www.contoso.com/"; // CHANGE THIS TO YOUR PRODUCTION DEPLOYMENT LOCATION
 
+async function getHttpsOptions() {
+  const httpsOptions = await devCerts.getHttpsServerOptions();
+  return { cacert: httpsOptions.ca, key: httpsOptions.key, cert: httpsOptions.cert };
+}
+
 module.exports = async (env, options) => {
   const dev = options.mode === "development";
   const buildType = dev ? "dev" : "prod";
@@ -20,10 +25,15 @@ module.exports = async (env, options) => {
       fallbackauthdialog: "./src/helpers/fallbackauthdialog.js",
     },
     output: {
-      path: path.resolve(process.cwd(), "dist"),
+      devtoolModuleFilenameTemplate: "webpack:///[resource-path]?[loaders]",
     },
     resolve: {
       extensions: [".ts", ".tsx", ".html", ".js"],
+      fallback: {
+        https: require.resolve("https-browserify"),
+        http: require.resolve("stream-http"),
+        buffer: require.resolve("buffer/"),
+      },
     },
     module: {
       rules: [
@@ -43,7 +53,7 @@ module.exports = async (env, options) => {
           use: "html-loader",
         },
         {
-          test: /\.(png|jpg|jpeg|gif)$/,
+          test: /\.(png|jpg|jpeg|gif|ico)$/,
           loader: "file-loader",
           options: {
             name: "[path][name].[ext]",
@@ -76,7 +86,7 @@ module.exports = async (env, options) => {
           },
           {
             from: "manifest*.xml",
-            to: "[name]." + buildType + ".[ext]",
+            to: "[name]." + buildType + "[ext]",
             transform(content) {
               if (dev) {
                 return content;
