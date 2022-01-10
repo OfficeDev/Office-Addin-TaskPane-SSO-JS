@@ -23,6 +23,7 @@
     "start": "npm run build:dev && concurrently \"npm run start:server\" \"npm run sideload\"",
     "start:server": "office-addin-sso start manifest.xml",
     "stop": "office-addin-debugging stop manifest.xml",
+    "test": "echo \"No tests.\"",
     "validate": "office-addin-manifest validate manifest.xml",
     "watch": "webpack --watch --mode development"
   },
