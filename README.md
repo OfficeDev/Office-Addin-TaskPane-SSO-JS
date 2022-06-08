@@ -3,8 +3,36 @@
 This repository contains the source code used by the [Yo Office generator](https://github.com/OfficeDev/generator-office) when you create a new Office Add-in that appears in the task pane. You can also use this repository as a sample to base your own project from if you choose not to use the generator. 
 
 ## JavaScript
+# Office Add-in that supports Single Sign-on to Office, the Add-in, and Microsoft Graph
 
-This template is written using JavaScript. For the [TypeScript](http://www.typescriptlang.org/) version of this template, go to [Office-Addin-TaskPane-SSO](https://github.com/OfficeDev/Office-Addin-TaskPane-SSO).
+```bash
+    $ npm run configure-sso
+```
+The `getAccessTokenAsync` API in Office.js enables users who are signed into Office to get access to an AAD-protected add-in and to Microsoft Graph without needing to sign-in again. This sample is built on Node.js and express. 
+
+- Run the following command to build the project, start the local web server, and sideload your add-in in the previously selected Office client application
+
+```bash
+    $ npm start
+```
+
+    > [!NOTE]
+    > Office Add-ins should use HTTPS, not HTTP, even when you are developing. If you are prompted to install a certificate after you run the following command, accept the prompt to install the certificate that the Yeoman generator provide.
+
+- In the Office client application that opens when you run the previous command (i.e., Excel, Word or PowerPoint), make sure that you're signed in with a user that's a member of the same Microsoft 365 organization as the Microsoft 365 administrator account that you used to connect to Azure while configuring SSO in step 3 of the previous section. Doing so establishes the appropriate conditions for SSO to succeed.
+
+- In the Office client application, choose the Home tab, and then choose the Show Taskpane button in the ribbon to open the add-in task pane. The following image shows this button in Excel.
+
+
+    ![Example of taskpane ribbon button in an Excel worksheet](https://docs.microsoft.com/en-us/office/dev/add-ins/images/excel-quickstart-addin-3b.png?raw=true)
+
+- At the bottom of the task pane, choose the Get My User Profile Information button to initiate the SSO process.
+
+    If a dialog window appears to request permissions on behalf of the add-in, this means that SSO is not supported for your scenario and the add-in has instead fallen back to an alternate method of user authentication. This may occur when the tenant administrator hasn't granted consent for the add-in to access Microsoft Graph, or when the user isn't signed into Office with a valid Microsoft account or Microsoft 365 Education or Work account. Choose the Accept button in the dialog window to continue.
+
+- The add-in retrieves profile information for the signed-in user and writes it to the document. 
+
+    ![Example of profile information written to an Excel worksheet](https://docs.microsoft.com/en-us/office/dev/add-ins/images/sso-user-profile-info-excel.png?raw=true)
 
 ## Debugging
 
@@ -29,11 +57,11 @@ Get a free sandbox, tools, and other resources you need to build solutions for t
 
 ## Additional resources
 
-* [Office add-in documentation](https://docs.microsoft.com/office/dev/add-ins/overview/office-add-ins)
-* More Office Add-in samples at [OfficeDev on Github](https://github.com/officedev)
+* [Office add-in documentation](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* More Office Add-ins samples at [OfficeDev on Github](https://github.com/officedev)
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ## Copyright
 
-Copyright (c) 2019 Microsoft Corporation. All rights reserved.
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.
