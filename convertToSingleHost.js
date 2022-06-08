@@ -99,7 +99,8 @@ async function updatePackageJsonForSingleHost(host) {
   // remove scripts that are unrelated to the selected host
   Object.keys(content.scripts).forEach(function (key) {
     if (
-      (key === "sideload" && host === "outlook") ||
+      key.startsWith("sideload:") ||
+      key.startsWith("unload:") ||
       key === "convert-to-single-host" ||
       key === "start:desktop:outlook"
     ) {
