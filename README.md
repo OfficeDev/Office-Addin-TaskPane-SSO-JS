@@ -3,12 +3,13 @@
 This repository contains the source code used by the [Yo Office generator](https://github.com/OfficeDev/generator-office) when you create a new Office Add-in that appears in the task pane. You can also use this repository as a sample to base your own project from if you choose not to use the generator. 
 
 ## JavaScript
+
 # Office Add-in that supports Single Sign-on to Office, the Add-in, and Microsoft Graph
 
 ```bash
     $ npm run configure-sso
 ```
-The `getAccessTokenAsync` API in Office.js enables users who are signed into Office to get access to an AAD-protected add-in and to Microsoft Graph without needing to sign-in again. This sample is built on Node.js and express. 
+- A web browser window will open and prompt you to sign in to Azure. Sign in to Azure using your Microsoft 365 administrator credentials. These credentials will be used to register a new application in Azure and configure the settings required by SSO.
 
 - Run the following command to build the project, start the local web server, and sideload your add-in in the previously selected Office client application
 
@@ -57,7 +58,7 @@ Get a free sandbox, tools, and other resources you need to build solutions for t
 
 ## Additional resources
 
-* [Office add-in documentation](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* [Office Add-ins documentation](https://docs.microsoft.com/office/dev/add-ins/overview/office-add-ins)
 * More Office Add-ins samples at [OfficeDev on Github](https://github.com/officedev)
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
