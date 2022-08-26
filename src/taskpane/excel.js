@@ -3,12 +3,39 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global document, Office, require */
+/* global document, Excel, Office */
 
-const ssoAuthHelper = require("./../helpers/ssoauthhelper");
+import { getGraphData } from "./../helpers/ssoauthhelper";
+import { filterUserProfileInfo } from "./../helpers/documentHelper";
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
-    document.getElementById("getGraphDataButton").onclick = ssoAuthHelper.getGraphData;
+    document.getElementById("getProfileButton").onclick = run;
   }
 });
+
+export async function run() {
+  getGraphData(writeDataToExcel);
+}
+
+function writeDataToExcel(result) {
+  return Excel.run(function (context) {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    let data = [];
+    let userProfileInfo = filterUserProfileInfo(result);
+
+    for (let i = 0; i < userProfileInfo.length; i++) {
+      if (userProfileInfo[i] !== null) {
+        let innerArray = [];
+        innerArray.push(userProfileInfo[i]);
+        data.push(innerArray);
+      }
+    }
+    const rangeAddress = `B5:B${5 + (data.length - 1)}`;
+    const range = sheet.getRange(rangeAddress);
+    range.values = data;
+    range.format.autofitColumns();
+
+    return context.sync();
+  });
+}
