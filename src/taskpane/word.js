@@ -15,10 +15,10 @@ Office.onReady((info) => {
 });
 
 export async function run() {
-  getGraphData(writeDataToWord);
+  getGraphData(writeDataToOfficeDocument);
 }
 
-function writeDataToWord(result) {
+function writeDataToOfficeDocument(result) {
   return Word.run(function (context) {
     let data = [];
     let userProfileInfo = filterUserProfileInfo(result);

@@ -15,10 +15,10 @@ Office.onReady((info) => {
 });
 
 export async function run() {
-  getGraphData(writeDataToExcel);
+  getGraphData(writeDataToOfficeDocument);
 }
 
-function writeDataToExcel(result) {
+function writeDataToOfficeDocument(result) {
   return Excel.run(function (context) {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     let data = [];

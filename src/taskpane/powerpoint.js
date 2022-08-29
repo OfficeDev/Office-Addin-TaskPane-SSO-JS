@@ -15,10 +15,10 @@ Office.onReady((info) => {
 });
 
 export async function run() {
-  getGraphData(writeDataToPowerPoint);
+  getGraphData(writeDataToOfficeDocument);
 }
 
-function writeDataToPowerPoint(result) {
+function writeDataToOfficeDocument(result) {
   let data = [];
   let userProfileInfo = filterUserProfileInfo(result);
 
