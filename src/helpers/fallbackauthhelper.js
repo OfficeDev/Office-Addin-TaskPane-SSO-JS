@@ -3,12 +3,16 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global console, location, Office, require */
-const documentHelper = require("./documentHelper");
-const sso = require("office-addin-sso");
-var loginDialog;
+/* global console, location, Office */
 
-export function dialogFallback() {
+import * as sso from "office-addin-sso";
+
+var loginDialog = null;
+let callbackFunction = null;
+
+export function dialogFallback(callback) {
+  callbackFunction = callback;
+
   // We fall back to Dialog API for any error.
   const url = "/fallbackauthdialog.html";
   showLoginPopup(url);
@@ -24,11 +28,15 @@ async function processMessage(arg) {
     // We now have a valid access token.
     loginDialog.close();
     const response = await sso.makeGraphApiCall(messageFromDialog.result);
-    documentHelper.writeDataToOfficeDocument(response);
+    callbackFunction(response);
+  } else if (messageFromDialog.error === undefined && messageFromDialog.result.errorCode === undefined) {
+    // Need to pick the user to use to auth
   } else {
     // Something went wrong with authentication or the authorization of the web application.
     loginDialog.close();
-    sso.showMessage(JSON.stringify(messageFromDialog.error.toString()));
+    if (messageFromDialog.error) {
+      sso.showMessage(JSON.stringify(messageFromDialog.error.toString()));
+    }
   }
 }
 
