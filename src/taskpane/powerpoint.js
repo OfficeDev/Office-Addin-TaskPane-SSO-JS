@@ -5,7 +5,7 @@
 
 /* global document, Office */
 
-import { getGraphData } from "./../helpers/ssoauthhelper";
+import { getUserData } from "../helpers/sso-helper";
 import { filterUserProfileInfo } from "./../helpers/documentHelper";
 
 Office.onReady((info) => {
@@ -15,7 +15,7 @@ Office.onReady((info) => {
 });
 
 export async function run() {
-  getGraphData(writeDataToOfficeDocument);
+  getUserData(writeDataToOfficeDocument);
 }
 
 function writeDataToOfficeDocument(result) {
