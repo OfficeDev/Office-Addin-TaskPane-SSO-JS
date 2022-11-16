@@ -6,7 +6,7 @@
 import { showMessage } from "./message-helper";
 import * as $ from "jquery";
 
-export async function callGetUserData(middletierToken) {
+export async function getUserData(middletierToken) {
   try {
     const response = await $.ajax({
       type: "GET",

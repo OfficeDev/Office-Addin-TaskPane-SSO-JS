@@ -4,7 +4,7 @@
  */
 
 import { dialogFallback } from "./fallbackauthdialog.js";
-import { callGetUserData } from "./middle-tier-calls";
+import { getUserData } from "./middle-tier-calls";
 import { showMessage } from "./message-helper";
 import { handleClientSideErrors } from "./error-handler";
 
@@ -12,14 +12,14 @@ import { handleClientSideErrors } from "./error-handler";
 
 let retryGetMiddletierToken = 0;
 
-export async function getUserData(callback) {
+export async function getUserProfile(callback) {
   try {
     let middletierToken = await OfficeRuntime.auth.getAccessToken({
       allowSignInPrompt: true,
       allowConsentPrompt: true,
       forMSGraphAccess: true,
     });
-    let response = await callGetUserData(middletierToken);
+    let response = await getUserData(middletierToken);
     if (!response) {
       throw new Error("Middle tier didn't respond");
     } else if (response.claims) {
@@ -29,7 +29,7 @@ export async function getUserData(callback) {
       let mfaMiddletierToken = await OfficeRuntime.auth.getAccessToken({
         authChallenge: response.claims,
       });
-      response = callGetUserData(mfaMiddletierToken);
+      response = getUserData(mfaMiddletierToken);
     }
 
     // AAD errors are returned to the client with HTTP code 200, so they do not trigger
@@ -62,7 +62,7 @@ function handleAADErrors(response, callback) {
 
   if (response.error_description.indexOf("AADSTS500133") !== -1 && retryGetMiddletierToken <= 0) {
     retryGetMiddletierToken++;
-    getUserData(callback);
+    getUserProfile(callback);
   } else {
     dialogFallback(callback);
   }

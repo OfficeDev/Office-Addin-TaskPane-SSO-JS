@@ -7,7 +7,7 @@
 /* global console, localStorage, location, Office, window */
 
 import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
-import { callGetUserData } from "./middle-tier-calls";
+import { getUserData } from "./middle-tier-calls";
 import { showMessage } from "./message-helper";
 
 const clientId = "{application GUID here}"; //This is your client ID
@@ -105,7 +105,7 @@ export async function dialogFallback(callback) {
   if (homeAccountId !== null) {
     const result = await publicClientApp.acquireTokenSilent(loginRequest);
     if (result !== null && result.accessToken !== null) {
-      const response = await callGetUserData(result.accessToken);
+      const response = await getUserData(result.accessToken);
       callbackFunction(response);
     }
   } else {
@@ -134,7 +134,7 @@ async function processMessage(arg) {
       publicClientApp.setActiveAccount(homeAccount);
     }
 
-    const response = await callGetUserData(messageFromDialog.result);
+    const response = await getUserData(messageFromDialog.result);
     callbackFunction(response);
   } else if (messageFromDialog.error === undefined && messageFromDialog.result.errorCode === undefined) {
     // Need to pick the user to use to auth
