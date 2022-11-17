@@ -8,13 +8,13 @@ import { getUserData } from "./middle-tier-calls";
 import { showMessage } from "./message-helper";
 import { handleClientSideErrors } from "./error-handler";
 
-/* global OfficeRuntime */
+/* global Office */
 
 let retryGetMiddletierToken = 0;
 
 export async function getUserProfile(callback) {
   try {
-    let middletierToken = await OfficeRuntime.auth.getAccessToken({
+    let middletierToken = await Office.auth.getAccessToken({
       allowSignInPrompt: true,
       allowConsentPrompt: true,
       forMSGraphAccess: true,
@@ -26,7 +26,7 @@ export async function getUserProfile(callback) {
       // Microsoft Graph requires an additional form of authentication. Have the Office host
       // get a new token using the Claims string, which tells AAD to prompt the user for all
       // required forms of authentication.
-      let mfaMiddletierToken = await OfficeRuntime.auth.getAccessToken({
+      let mfaMiddletierToken = await Office.auth.getAccessToken({
         authChallenge: response.claims,
       });
       response = getUserData(mfaMiddletierToken);
