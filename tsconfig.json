@@ -21,8 +21,7 @@
       "lib-amd",
       "server.js",
     ],
-    "ts-node": { 
-      "files": true 
+    "ts-node": {
+      "files": true
     }
-  } 
-      
+  }
