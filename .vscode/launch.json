@@ -4,7 +4,7 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-      {
+    {
       "name": "Excel Desktop (Edge Chromium)",
       "type": "msedge",
       "request": "attach",
@@ -89,21 +89,6 @@
       "postDebugTask": "Stop Debug"
     },
     {
-      "name": "Office Online (Chrome)",
-      "type": "chrome",
-      "request": "launch",
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "Debug: Web"
-    },
-    {
-      "name": "Office Online (Edge Chromium)",
-      "type": "msedge",
-      "request": "launch",
-      "port": 9222,
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "Debug: Web"
-    },
-    {
       "name": "Middle Tier (launch and attach)",
       "type": "node",
       "request": "attach",
@@ -121,4 +106,3 @@
     },
   ]
 }
-  
