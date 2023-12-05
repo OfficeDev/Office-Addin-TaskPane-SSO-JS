@@ -3,7 +3,7 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global global, Office, self, window */
+/* global Office */
 
 Office.onReady(() => {
   // If needed, Office.js is ready to be called.
@@ -21,7 +21,7 @@ export function action(event) {
     persistent: true,
   };
 
-  // Show a notification message
+  // Show a notification message.
   Office.context.mailbox.item.notificationMessages.replaceAsync("action", message);
 
   // Be sure to indicate when the add-in command function is complete.
