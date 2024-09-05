@@ -2,9 +2,12 @@
 
 This repository contains the source code used by the [Yo Office generator](https://github.com/OfficeDev/generator-office) when you create a new Office Add-in that appears in the task pane. You can also use this repository as a sample to base your own project from if you choose not to use the generator.
 
-## JavaScript
 
 # Office Add-in that supports Single Sign-on to Office, the Add-in, and Microsoft Graph
+
+## Instructions
+
+- Run the following command to configure single-sign on for your add-in project.
 
 ```bash
     $ npm run configure-sso
@@ -52,12 +55,9 @@ Questions about Office Add-ins development in general should be posted to [Micro
 
 ## Join the Microsoft 365 Developer Program
 
-Get a free sandbox, tools, and other resources you need to build solutions for the Microsoft 365 platform.
+Join the [Microsoft 365 Developer Program](https://aka.ms/m365devprogram) to get resources and information to help you build solutions for the Microsoft 365 platform, including recommendations tailored to your areas of interest.
 
-- [Free developer sandbox](https://developer.microsoft.com/microsoft-365/dev-program#Subscription) Get a free, renewable 90-day Microsoft 365 E5 developer subscription.
-- [Sample data packs](https://developer.microsoft.com/microsoft-365/dev-program#Sample) Automatically configure your sandbox by installing user data and content to help you build your solutions.
-- [Access to experts](https://developer.microsoft.com/microsoft-365/dev-program#Experts) Access community events to learn from Microsoft 365 experts.
-- [Personalized recommendations](https://developer.microsoft.com/microsoft-365/dev-program#Recommendations) Find developer resources quickly from your personalized dashboard.
+You might also qualify for a free developer subscription that's renewable for 90 days and comes configured with sample data; for details, see the [FAQ](https://learn.microsoft.com/office/developer-program/microsoft-365-developer-program-faq#who-qualifies-for-a-microsoft-365-e5-developer-subscription-).
 
 ## Additional resources
 
