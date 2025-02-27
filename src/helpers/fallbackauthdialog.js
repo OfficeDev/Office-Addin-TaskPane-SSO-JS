@@ -95,7 +95,11 @@ function handleResponse(response) {
   } else {
     console.log("token type is:" + response.tokenType);
     Office.context.ui.messageParent(
-      JSON.stringify({ status: "success", result: response.accessToken, accountId: response.account.homeAccountId })
+      JSON.stringify({
+        status: "success",
+        result: response.accessToken,
+        accountId: response.account.homeAccountId,
+      })
     );
   }
 }
@@ -138,7 +142,10 @@ async function processMessage(arg) {
 
     const response = await getUserData(messageFromDialog.result);
     callbackFunction(response);
-  } else if (messageFromDialog.error === undefined && messageFromDialog.result.errorCode === undefined) {
+  } else if (
+    messageFromDialog.error === undefined &&
+    messageFromDialog.result.errorCode === undefined
+  ) {
     // Need to pick the user to use to auth
   } else {
     // Something went wrong with authentication or the authorization of the web application.
@@ -153,7 +160,8 @@ async function processMessage(arg) {
 
 // Use the Office dialog API to open a pop-up and display the sign-in page for the identity provider.
 function showLoginPopup(url) {
-  var fullUrl = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + url;
+  var fullUrl =
+    location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + url;
 
   // height and width are percentages of the size of the parent Office application, e.g., PowerPoint, Excel, Word, etc.
   Office.context.ui.displayDialogAsync(fullUrl, { height: 60, width: 30 }, function (result) {

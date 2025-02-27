@@ -33,5 +33,7 @@ function writeDataToOfficeDocument(result) {
     userInfo += data[i] + "\n";
   }
 
-  Office.context.mailbox.item.body.setSelectedDataAsync(userInfo, { coercionType: Office.CoercionType.Html });
+  Office.context.mailbox.item.body.setSelectedDataAsync(userInfo, {
+    coercionType: Office.CoercionType.Html,
+  });
 }
